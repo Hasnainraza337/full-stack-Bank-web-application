@@ -1,0 +1,26 @@
+ @import "./scss/bootstrap";
+ @import "./scss/home";
+ @import "./scss/dashboard";
+ @import "./scss/addAcounts";
+ @import "./scss/auth";
+ @import "./scss/nopage";
+
+ #root {
+     display: flex;
+     flex-direction: column;
+     min-height: 100vh;
+ }
+
+ main {
+     flex: 1 0 auto;
+ }
+
+
+
+
+ //  topbar
+ @media (min-width: 330px) {
+     .topbar {
+         height: 20px;
+     }
+ }
