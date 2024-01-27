@@ -11,40 +11,7 @@ const initialState = { email: '', password: '' }
 
 export default function Login() {
 
-  // const { dispatch, setIsAuthenticated } = useAuthContext()
-  // const [states, setStates] = useState(initialState)
-  // const [isProcessing, setIsProcessing] = useState(false)
-  // const navigate = useNavigate()
-  // const handleChange = e => setStates(s => ({ ...s, [e.target.name]: e.target.value }))
-
-  // const handleLogin = async () => {
-
-  //   const { email, password } = states;
-  //   setIsProcessing(true)
-  //   const res = await fetch('/signin', {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     },
-  //     body: JSON.stringify({
-  //       email, password
-  //     })
-  //   });
-
-  //   const data = await res.json();
-
-  //   if (data.status === 422 || !data) {
-  //     console.log("invalid data")
-  //   } else {
-  //     dispatch({ type: "SET_LOGGED_IN" })
-  //     setIsAuthenticated(true);
-  //     alert("Login Successfully")
-  //     setIsProcessing(false)
-  //     navigate("/")
-
-  //   }
-
-  // }
+  
 
 
   return (
@@ -69,15 +36,7 @@ export default function Login() {
 
                   >
                     <Form.Item name='email'
-                      rules={[
-                        {
-                          required: true,
-                          message: 'Please type your email correctly.'
-                        },
-                        { type: 'email', message: 'Please enter a valid email.' }
-
-                      ]}
-                      hasFeedback
+                     
                     >
                       <Input
                         prefix={<MdEmail style={{ fontSize: "18px", marginRight: "6px" }} />}
@@ -85,13 +44,7 @@ export default function Login() {
                       />
                     </Form.Item>
                     <Form.Item name='password'
-                      rules={[
-                        {
-                          required: true,
-                        },
-                        { min: 6 }
-                      ]}
-                      hasFeedback
+                      
                     >
                       <Input.Password
                         prefix={<BiSolidLock style={{ fontSize: "18px", marginRight: "6px" }} />}

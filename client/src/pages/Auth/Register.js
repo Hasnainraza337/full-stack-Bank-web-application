@@ -7,39 +7,10 @@ import { BiSolidUserPlus, BiSolidLock } from "react-icons/bi"
 import { MdEmail, MdSlideshow } from "react-icons/md"
 import { BsTelephonePlusFill } from "react-icons/bs"
 
-const initialState = { fullName: '', email: '', phone: '', password: '', confirmPassword: '' }
+const initialState = { fullName: '', email: '', phone: '', password: '' }
 
 export default function Register() {
-
-  // const [state, setState] = useState(initialState)
-  // const navigate = useNavigate()
-  // const handleChange = e => setState(s => ({ ...s, [e.target.name]: e.target.value }))
-
-  // const createUser = async () => {
-
-  //   const { fullName, email, phone, work, password, confirmPassword } = state;
-
-  //   const res = await fetch('/signup', {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     },
-  //     body: JSON.stringify({
-  //       fullName, email, phone, work, password, confirmPassword
-  //     })
-  //   });
-
-  //   const data = await res.json();
-
-  //   if (data.status === 422 || !data) {
-  //     console.log("invalid data")
-  //   } else {
-  //     console.log("Registration successfully")
-  //     navigate("/auth/login")
-
-  //   }
-
-  // }
+ 
 
   return (
     <>
@@ -57,88 +28,35 @@ export default function Register() {
 
                   >
                     <Form.Item name='fullName'
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please type your name."
-                        },
-                        { whitespace: true },
-                        { min: 3 }
-                      ]}
-                      hasFeedback
                     >
                       <Input
                         prefix={<BiSolidUserPlus style={{ fontSize: "20px", marginRight: "6px" }} />}
-                        placeholder='Your Name' name='fullName' className='all-input'
+                        placeholder='Enter Name' name='fullName' className='all-input'
                       />
                     </Form.Item>
                     <Form.Item name='email'
-                      rules={[
-                        {
-                          required: true,
-                          message: 'Please type your email correctly.'
-                        },
-                        { type: 'email', message: 'Please enter a valid email.' }
-
-                      ]}
-                      hasFeedback
                     >
                       <Input
                         prefix={<MdEmail style={{ fontSize: "18px", marginRight: "6px" }} />}
-                        placeholder='Your Email' name='email' className='all-input'
+                        placeholder='Enter Email' name='email' className='all-input'
                       />
                     </Form.Item>
                     <Form.Item name='phone'
-                      rules={[
-                        {
-                          required: true,
-                          message: 'Please type your phone correctly.'
-                        },
-
-                      ]}
-                      hasFeedback
                     >
                       <Input
                         prefix={<BsTelephonePlusFill style={{ fontSize: "16px", marginRight: "6px" }} />}
-                        placeholder='Your Phone' name='phone' className='all-input'
+                        placeholder='Enter Phone' name='phone' className='all-input'
                       />
                     </Form.Item>
                     <Form.Item name='password'
-                      rules={[
-                        {
-                          required: true,
-                        },
-                        { min: 6 }
-                      ]}
-                      hasFeedback
+                      
                     >
                       <Input.Password
                         prefix={<BiSolidLock style={{ fontSize: "18px", marginRight: "6px" }} />}
-                        placeholder='Your Password' name='password' className='all-input'
+                        placeholder='Enter Password' name='password' className='all-input'
                       />
                     </Form.Item>
-                    <Form.Item name='confirmPassword'
-                      dependencies={['password']}
-                      rules={[
-                        {
-                          required: true,
-                        },
-                        ({ getFieldValue }) => ({
-                          validator(_, value) {
-                            if (!value || getFieldValue('password') === value) {
-                              return Promise.resolve()
-                            }
-                            return Promise.reject("Passwod does not match with confirm Password.")
-                          }
-                        })
-                      ]}
-                      hasFeedback
-                    >
-                      <Input.Password
-                        prefix={<BiSolidLock style={{ fontSize: "18px", marginRight: "6px" }} />}
-                        placeholder='Confirm Your Password' name='confirmPassword' className='all-input'
-                      />
-                    </Form.Item>
+                     
 
                     <Button className='mt-1' type='primary' htmlType='submit'>Register</Button>
 

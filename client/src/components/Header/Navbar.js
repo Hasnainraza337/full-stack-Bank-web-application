@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 export default function Navbar() {
 
-    const Authenticated = true
+    const Authenticated = false
     return (
         <header>
             <nav className="navbar navbar-expand-lg bg-primary navbar-dark">
