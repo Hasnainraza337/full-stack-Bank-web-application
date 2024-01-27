@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs';
-import { GithubOutlined, TwitterOutlined } from "@ant-design/icons"
-import { BsFacebook } from "react-icons/bs";
+import { IoLogoFacebook } from "react-icons/io5";
+import { IoLogoGithub } from "react-icons/io5";
+import { RiTwitterXFill } from "react-icons/ri";
 
 
 export default function Topbar() {
@@ -20,15 +21,15 @@ export default function Topbar() {
                         <p className='text-white mb-0'>{today}</p>
                     </div>
                     <div>
-                        <ul className='d-flex flex-wrap' style={{ listStyle: "none" }}>
+                        <ul className='d-flex align-items-center flex-wrap' style={{ listStyle: "none" }}>
                             <li className='me-2'>
-                                <BsFacebook style={{ color: "white" }} />
+                                <IoLogoFacebook style={{ color: "white", cursor: "pointer" }} />
                             </li>
                             <li className='me-2'>
-                                <GithubOutlined style={{ color: "white" }} />
+                                <IoLogoGithub style={{ color: "white", cursor: "pointer" }} />
                             </li>
                             <li>
-                                <TwitterOutlined style={{ color: "white" }} />
+                                <RiTwitterXFill style={{ color: "white", cursor: "pointer" }} />
                             </li>
                         </ul>
                     </div>

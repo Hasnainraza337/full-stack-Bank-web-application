@@ -6,11 +6,47 @@ import { Link, useNavigate } from 'react-router-dom'
 import { BiSolidUserPlus, BiSolidLock } from "react-icons/bi"
 import { MdEmail, MdSlideshow } from "react-icons/md"
 import { BsTelephonePlusFill } from "react-icons/bs"
+import { useAuthContext } from '../../contexts/AuthContext'
+import { toast } from 'react-toastify';
 
-const initialState = { fullName: '', email: '', phone: '', password: '' }
+const initialState = { userName: '', email: '', phone: '', password: '' }
 
 export default function Register() {
- 
+  const [state, setState] = useState(initialState)
+  const navigate = useNavigate();
+  const { storeTokenInLs, API } = useAuthContext();
+  const [form] = Form.useForm();
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setState(s => ({ ...s, [name]: value }))
+  }
+
+  const URL = `${API}/api/auth/register`
+
+  const handleRegister = async () => {
+    try {
+      const response = await fetch(URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(state)
+
+      })
+      const res_data = await response.json();
+      if (response.ok) {
+        storeTokenInLs(res_data.token)
+        form.resetFields();
+        toast.success("Registeration Successfull")
+        navigate("/")
+      } else {
+        toast.error(res_data.extraDetails ? res_data.extraDetails : res_data.message)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
 
   return (
     <>
@@ -23,15 +59,17 @@ export default function Register() {
                   <Title level={2} className='m-0 mb-4'>Sign up</Title>
 
                   <Form layout="vertical" autoComplete='off'
-                    method='POST'
-                  // onFinish={createUser}
+                    // method='POST'
+                    form={form}
+                    onFinish={handleRegister}
 
                   >
-                    <Form.Item name='fullName'
+                    <Form.Item name='userName'
                     >
                       <Input
                         prefix={<BiSolidUserPlus style={{ fontSize: "20px", marginRight: "6px" }} />}
-                        placeholder='Enter Name' name='fullName' className='all-input'
+                        placeholder='Enter Name' name='userName' className='all-input'
+                        onChange={handleChange}
                       />
                     </Form.Item>
                     <Form.Item name='email'
@@ -39,6 +77,7 @@ export default function Register() {
                       <Input
                         prefix={<MdEmail style={{ fontSize: "18px", marginRight: "6px" }} />}
                         placeholder='Enter Email' name='email' className='all-input'
+                        onChange={handleChange}
                       />
                     </Form.Item>
                     <Form.Item name='phone'
@@ -46,17 +85,19 @@ export default function Register() {
                       <Input
                         prefix={<BsTelephonePlusFill style={{ fontSize: "16px", marginRight: "6px" }} />}
                         placeholder='Enter Phone' name='phone' className='all-input'
+                        onChange={handleChange}
                       />
                     </Form.Item>
                     <Form.Item name='password'
-                      
+
                     >
                       <Input.Password
                         prefix={<BiSolidLock style={{ fontSize: "18px", marginRight: "6px" }} />}
                         placeholder='Enter Password' name='password' className='all-input'
+                        onChange={handleChange}
                       />
                     </Form.Item>
-                     
+
 
                     <Button className='mt-1' type='primary' htmlType='submit'>Register</Button>
 

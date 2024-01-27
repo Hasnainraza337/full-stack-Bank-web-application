@@ -10,7 +10,7 @@ const adminRouter = require("./Router/Admin");
 const errorMiddleware = require("./middlewares/errorMiddleware");
 
 const corsoptions = {
-    origin: "http://localhost:5173",
+    origin: "http://localhost:3000",
     methods: "GET,POST,PUT,DELETE,PATCH",
     Credentials: true
 }

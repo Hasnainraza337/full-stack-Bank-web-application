@@ -1,10 +1,11 @@
 import { Button } from 'antd'
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useAuthContext } from '../../contexts/AuthContext';
 
 export default function Navbar() {
 
-    const Authenticated = false
+    const { isLoggedIn, user, } = useAuthContext();
     return (
         <header>
             <nav className="navbar navbar-expand-lg bg-primary navbar-dark">
@@ -16,21 +17,27 @@ export default function Navbar() {
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                             <li className="nav-item">
-                                {!Authenticated
-                                    ? <Link to="/auth/login"><Button >Login</Button></Link>
-                                    : <>
-                                        <Link to="/dashboard">
-                                            <Button className='me-2'>Dashboard</Button>
-                                        </Link>
-                                        <Button type="primary" danger >Logout</Button>
-                                    </>
+                                {user.isAdmin &&
+                                    <Link to="/dashboard">
+                                        <Button className='me-2'>Dashboard</Button>
+                                    </Link>
                                 }
-
+                            </li>
+                            <li>
+                                {isLoggedIn ? (
+                                    <>
+                                        <Link to="/auth/logout">
+                                            <Button Button type="primary" danger >Logout</Button>
+                                        </Link>
+                                    </>
+                                ) : (
+                                    <Link to="/auth/login"><Button >Login</Button></Link>
+                                )}
                             </li>
                         </ul>
                     </div>
                 </div>
             </nav>
-        </header>
+        </header >
     )
 }

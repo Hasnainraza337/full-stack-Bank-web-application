@@ -11,7 +11,7 @@ export default function Index() {
                 <Routes>
                     <Route path='/login' element={<Login />} />
                     <Route path='/register' element={<Register />} />
-                    {/* <Route path='/logout' element={<Logout />} /> */}
+                    <Route path='/logout' element={<Logout />} />
                     <Route path="*" element={<h1 className='text-center'>404 Page Not Found</h1>} />
                 </Routes>
             </main>
