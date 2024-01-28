@@ -16,11 +16,6 @@ const accountSchema = new mongoose.Schema({
         required: true,
 
     },
-    accountNumber: {
-        type: String,
-        required: true,
-
-    },
     accountType: {
         type: String,
         required: true,
@@ -31,9 +26,17 @@ const accountSchema = new mongoose.Schema({
         required: true,
 
     },
+    phone: {
+        type: String,
+        required: true,
+
+    },
     formattedDate: {
         type: String
-    }
+    },
+    accountNumber: {
+        type: String,
+    },
 
 })
 

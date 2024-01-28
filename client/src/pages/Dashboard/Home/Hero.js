@@ -2,8 +2,10 @@ import React from 'react'
 import { PlusOutlined, EyeOutlined, TransactionOutlined } from "@ant-design/icons"
 import { Link } from 'react-router-dom'
 import { FaUser } from "react-icons/fa";
+import { useDataContext } from "../../../contexts/DataContext"
 
 export default function Hero() {
+  const { accounts } = useDataContext()
   return (
     <>
       <div className="container py-5">
@@ -21,7 +23,7 @@ export default function Hero() {
                 </Link>
               </div>
               <hr className='mt-2' />
-              <span className='text-center'>0</span>
+              <span className='text-center'>{accounts.length}</span>
             </div>
           </div>
           <div className="col-12 col-md-6">

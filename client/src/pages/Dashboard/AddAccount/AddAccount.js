@@ -1,16 +1,19 @@
 import React, { useState } from 'react'
-import { FaUser, FaIdCard, FaInfoCircle, FaMoneyBillAlt } from "react-icons/fa";
+import { FaUser, FaIdCard, FaInfoCircle, FaMoneyBillAlt, FaPhoneAlt } from "react-icons/fa";
 import { HiMiniBuildingLibrary } from "react-icons/hi2";
 import { useAuthContext } from '../../../contexts/AuthContext';
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom"
+import { useDataContext } from '../../../contexts/DataContext';
 
-const initialState = { fullName: "", idCard: "", branchCode: 0, accountNumber: "", accountType: "", deposit: 0 }
+const initialState = { fullName: "", idCard: "", phone: "", branchCode: 0, accountType: "", deposit: 0 }
 
 export default function AddAccount() {
     const { API } = useAuthContext()
+    const { getAllAccounts } = useDataContext()
     const [state, setState] = useState(initialState);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         const convertedValue = name === 'branchCode' || name === 'deposit'
@@ -34,6 +37,7 @@ export default function AddAccount() {
                 setState(initialState)
                 toast.success("Account Added Successfully")
                 navigate("/dashboard/accounts")
+                getAllAccounts()
             } else {
                 toast.error(accounts_data.extraDetails ? accounts_data.extraDetails : accounts_data.message)
             }
@@ -72,16 +76,16 @@ export default function AddAccount() {
                                         </div>
                                     </div>
                                     <div className="row mb-4">
+                                        <div className="col-12 col-md-6 col-lg-6">
+                                            <div className='d-flex justify-content-center align-items-center'>
+                                                <FaPhoneAlt style={{ fontSize: "40px", marginRight: "20px" }} />
+                                                <input type="number" name='phone' placeholder='Mobile Number' className='input form-control' onChange={handleChange} />
+                                            </div>
+                                        </div>
                                         <div className="col-12 col-md-6 col-lg-6 mb-4 mb-lg-0">
                                             <div className='d-flex justify-content-center align-items-center'>
                                                 <HiMiniBuildingLibrary style={{ fontSize: "40px", marginRight: "20px" }} />
-                                                <input type="number" name='branchCode' placeholder='Branch code(1 - 99)' className='input form-control' onChange={handleChange} />
-                                            </div>
-                                        </div>
-                                        <div className="col-12 col-md-6 col-lg-6">
-                                            <div className='d-flex justify-content-center align-items-center'>
-                                                <FaUser style={{ fontSize: "40px", marginRight: "20px" }} />
-                                                <input type="number" name='accountNumber' placeholder='Account Number(length should be 9)' className='input form-control' onChange={handleChange} />
+                                                <input type="number" name='branchCode' placeholder='Branch Code' className='input form-control' onChange={handleChange} />
                                             </div>
                                         </div>
                                     </div>

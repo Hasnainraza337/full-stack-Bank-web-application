@@ -59,7 +59,7 @@ const getAllAccounts = async (req, res) => {
 }
 
 // contact delete logic
-const deleteContact = async (req, res) => {
+const deleteAccount = async (req, res) => {
     try {
         const id = req.params.id;
         await Account.deleteOne({ _id: id })
@@ -70,4 +70,4 @@ const deleteContact = async (req, res) => {
 }
 
 
-module.exports = { getAllUsers, getAllAccounts, deleteUser, getOneUser, updateUser, deleteContact };
+module.exports = { getAllUsers, getAllAccounts, deleteUser, getOneUser, updateUser, deleteAccount };

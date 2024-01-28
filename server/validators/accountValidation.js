@@ -15,12 +15,12 @@ const accountSchema = z.object({
     branchCode: z
         .number({ required_error: "Branch Code is required" })
         .int()
-        .min(1, { message: "Branch Code should be more than 0" })
-        .max(99, { message: "Branch Code cannot be more than 99" }),
-    accountNumber: z
-        .string({ required_error: "Account Number is required" })
-        .refine(value => /^[0-9]{9}$/.test(value), {
-            message: "Account Number must be exactly 9 numeric characters",
+        .min(1, { message: "Branch Code should be 4 digit" })
+        .max(4000, { message: "Branch Code cannot be more than 4000" }),
+    phone: z
+        .string({ required_error: "Mobile phone is required" })
+        .refine(value => /^[0-9]{11}$/.test(value), {
+            message: "Mobile phone must be  11 numeric characters",
         }),
     accountType: z
         .string({ required_error: "Account Type is required" })

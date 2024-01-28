@@ -1,17 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Modal } from 'antd';
 import { ArrowLeftOutlined, DeleteOutlined, CreditCardOutlined, ArrowDownOutlined } from "@ant-design/icons"
 import { FaUser } from "react-icons/fa";
 import { Link } from 'react-router-dom'
-import { useAuthContext } from "../../../contexts/AuthContext"
+import { useDataContext } from '../../../contexts/DataContext';
 
 export default function Accounts() {
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
   const [open2, setOpen2] = useState(false);
-  const { API, authorizationToken } = useAuthContext()
-  const [accounts, setAccounts] = useState([]);
-  const showModal = () => {
+  const [selectedAccount, setSelectedAccount] = useState(null);
+  const { accounts, deleteAccount } = useDataContext()
+
+  const showModal = (accountId) => {
+    const selectedAccount = accounts.find(account => account._id === accountId);
+    setSelectedAccount(selectedAccount);
     setOpen(true);
   };
   const showModal1 = () => {
@@ -25,6 +28,7 @@ export default function Accounts() {
 
   const handleCancel = () => {
     setOpen(false);
+    setSelectedAccount(null)
   };
   const handleCancel1 = () => {
     setOpen1(false);
@@ -34,30 +38,17 @@ export default function Accounts() {
   };
 
 
-  const getAllAccounts = async () => {
+  const handleDeleteAccount = async (accountId) => {
     try {
-      const response = await fetch(`${API}/api/admin/accounts`, {
-        method: "GET",
-        headers: {
-          Authorization: authorizationToken,
-        },
-      })
-      // console.log(response)
-      if (response.ok) {
-        const accountsData = await response.json();
-        // console.log(accountsData.accounts)
-        setAccounts(accountsData.accounts)
-      }
+      await deleteAccount(accountId);
+      setOpen(false);
+      setSelectedAccount(null);
     } catch (error) {
-      console.log(error)
+      console.error("Error deleting account:", error);
     }
-  }
+  };
 
-  useEffect(() => {
-    getAllAccounts()
-  }, [])
 
-  // console.log(accounts)
   return (
     <>
       <div className="container py-5">
@@ -73,22 +64,26 @@ export default function Accounts() {
                 <table className="table table-hover table-bordered">
                   <thead className='table-dark'>
                     <tr>
-                      <th scope="col">Branch Code</th>
-                      <th scope="col">Account#</th>
-                      <th scope="col">Name</th>
-                      <th scope="col">Date of Opening</th>
-                      <th scope="col">Type</th>
-                      <th scope="col">Balance</th>
+                      <th>Branch Code</th>
+                      <th>Account#</th>
+                      <th>Name</th>
+                      <th>CNIC</th>
+                      <th>Phone</th>
+                      <th>Date of Opening</th>
+                      <th>Type</th>
+                      <th>Balance</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {accounts.map((account, i) => {
-                      const { branchCode, accountNumber, fullName, formattedDate, accountType, deposit } = account;
+                    {accounts.map((account) => {
+                      const { _id, branchCode, fullName, formattedDate, idCard, phone, accountNumber, accountType, deposit } = account;
                       return (
-                        <tr key={i}>
+                        <tr key={_id}>
                           <td>{branchCode}</td>
-                          <td style={{ cursor: "pointer", color: "blue" }} onClick={showModal}>{accountNumber}</td>
+                          <td style={{ cursor: "pointer", color: "blue" }} onClick={() => { showModal(_id) }}>{accountNumber}</td>
                           <td>{fullName}</td>
+                          <td>{idCard}</td>
+                          <td>{phone}</td>
                           <td>{formattedDate}</td>
                           <td>{accountType}</td>
                           <td>{deposit}</td>
@@ -111,12 +106,12 @@ export default function Accounts() {
 
         footer={[
 
-          <div className='d-flex justify-content-end align-items-center'>
-            <Button className='bg-success text-white d-flex justify-content-center align-items-center' onClick={showModal1}>
+          <div key="modal-footer" className='d-flex justify-content-end align-items-center'>
+            <Button key="deposite-button" className='bg-success text-white d-flex justify-content-center align-items-center' onClick={showModal1}>
               <CreditCardOutlined />Deposite
             </Button>
 
-            <Button type="primary" className='d-flex justify-content-center align-items-center' onClick={showModal2} >
+            <Button key="withdraw-button" type="primary" className='d-flex justify-content-center align-items-center' onClick={showModal2} >
               <ArrowDownOutlined />Withdraw
             </Button>
           </div>
@@ -125,34 +120,37 @@ export default function Accounts() {
       >
         <div className='d-flex justify-content-between align-items-center mt-5'>
           <h4>Account Details</h4>
-          <button className='bg-danger border-0 rounded-2 text-white py-1 px-2 d-flex align-items-center justify-content-center'><DeleteOutlined className='me-2' /> Delete Account</button>
+          <button className='bg-danger border-0 rounded-2 text-white py-1 px-2 d-flex align-items-center justify-content-center' onClick={() => { handleDeleteAccount(selectedAccount._id) }} ><DeleteOutlined className='me-2' /> Delete Account</button>
         </div>
-        <div style={{ width: "300px", marginTop: "30px" }}>
-          <div className='d-flex justify-content-between'>
-            <h6>Branch Code</h6>
-            <p>1</p>
+        {selectedAccount && (
+          <div style={{ width: "320px", marginTop: "30px" }}>
+            <div className='d-flex justify-content-between'>
+              <h6>Branch Code</h6>
+              <p>{selectedAccount.branchCode}</p>
+            </div>
+            <div className='d-flex justify-content-between'>
+              <h6>Account#</h6>
+              <p>{selectedAccount.accountNumber}</p>
+            </div>
+            <div className='d-flex justify-content-between'>
+              <h6>Full Name</h6>
+              <p>{selectedAccount.fullName}</p>
+            </div>
+            <div className='d-flex justify-content-between'>
+              <h6>Date of opening</h6>
+              <p>{selectedAccount.formattedDate}</p>
+            </div>
+            <div className='d-flex justify-content-between'>
+              <h6>Type</h6>
+              <p>{selectedAccount.accountType}</p>
+            </div>
+            <div className='d-flex justify-content-between'>
+              <h6>Balance</h6>
+              <p>{selectedAccount.deposit}</p>
+            </div>
           </div>
-          <div className='d-flex justify-content-between'>
-            <h6>Account#</h6>
-            <p>19322805</p>
-          </div>
-          <div className='d-flex justify-content-between'>
-            <h6>Full Name</h6>
-            <p>Raza</p>
-          </div>
-          <div className='d-flex justify-content-between'>
-            <h6>Registered</h6>
-            <p>24/01/2024</p>
-          </div>
-          <div className='d-flex justify-content-between'>
-            <h6>Type</h6>
-            <p>current</p>
-          </div>
-          <div className='d-flex justify-content-between'>
-            <h6>Balance</h6>
-            <p>0</p>
-          </div>
-        </div>
+        )}
+
       </Modal>
       {/* Deposit model */}
       <Modal
