@@ -46,7 +46,7 @@ const updateUser = async (req, res) => {
     }
 }
 // get all user from data base 
-const getAllContacts = async (req, res) => {
+const getAllAccounts = async (req, res) => {
     try {
         const accounts = await Account.find();
         if (!accounts || accounts.length === 0) {
@@ -70,4 +70,4 @@ const deleteContact = async (req, res) => {
 }
 
 
-module.exports = { getAllUsers, getAllContacts, deleteUser, getOneUser, updateUser, deleteContact };
+module.exports = { getAllUsers, getAllAccounts, deleteUser, getOneUser, updateUser, deleteContact };

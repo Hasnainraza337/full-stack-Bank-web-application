@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Modal } from 'antd';
 import { ArrowLeftOutlined, DeleteOutlined, CreditCardOutlined, ArrowDownOutlined } from "@ant-design/icons"
 import { FaUser } from "react-icons/fa";
 import { Link } from 'react-router-dom'
+import { useAuthContext } from "../../../contexts/AuthContext"
 
 export default function Accounts() {
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
   const [open2, setOpen2] = useState(false);
+  const { API, authorizationToken } = useAuthContext()
+  const [accounts, setAccounts] = useState([]);
   const showModal = () => {
     setOpen(true);
   };
@@ -29,6 +32,32 @@ export default function Accounts() {
   const handleCancel2 = () => {
     setOpen2(false);
   };
+
+
+  const getAllAccounts = async () => {
+    try {
+      const response = await fetch(`${API}/api/admin/accounts`, {
+        method: "GET",
+        headers: {
+          Authorization: authorizationToken,
+        },
+      })
+      // console.log(response)
+      if (response.ok) {
+        const accountsData = await response.json();
+        // console.log(accountsData.accounts)
+        setAccounts(accountsData.accounts)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getAllAccounts()
+  }, [])
+
+  // console.log(accounts)
   return (
     <>
       <div className="container py-5">
@@ -47,36 +76,25 @@ export default function Accounts() {
                       <th scope="col">Branch Code</th>
                       <th scope="col">Account#</th>
                       <th scope="col">Name</th>
-                      <th scope="col">Registered</th>
+                      <th scope="col">Date of Opening</th>
                       <th scope="col">Type</th>
                       <th scope="col">Balance</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <th scope="row">1</th>
-                      <td style={{ cursor: "pointer",color:"skyblue" }} onClick={showModal}>Mark</td>
-                      <td>Otto</td>
-                      <td>@mdo</td>
-                      <td>@mdo</td>
-                      <td>@mdo</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td><Link className='text-decoration-none' style={{ color: "skyblue", fontWeight: "500" }}>Mark</Link></td>
-                      <td>Thornton</td>
-                      <td>@fat</td>
-                      <td>@fat</td>
-                      <td>@fat</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">3</th>
-                      <td><Link className='text-decoration-none' style={{ color: "skyblue", fontWeight: "500" }}>Jacob</Link></td>
-                      <td>@twitter</td>
-                      <td>@twitter</td>
-                      <td>@twitter</td>
-                      <td>@twitter</td>
-                    </tr>
+                    {accounts.map((account, i) => {
+                      const { branchCode, accountNumber, fullName, formattedDate, accountType, deposit } = account;
+                      return (
+                        <tr key={i}>
+                          <td>{branchCode}</td>
+                          <td style={{ cursor: "pointer", color: "blue" }} onClick={showModal}>{accountNumber}</td>
+                          <td>{fullName}</td>
+                          <td>{formattedDate}</td>
+                          <td>{accountType}</td>
+                          <td>{deposit}</td>
+                        </tr>
+                      )
+                    })}
                   </tbody>
                 </table>
               </div>
