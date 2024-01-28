@@ -4,7 +4,7 @@ const cors = require("cors")
 const app = express()
 const dbConnect = require("./utils/dbConection")
 const authRouter = require("./Router/Auth");
-const contactRouter = require("./Router/Contact");
+const accountRouter = require("./Router/account");
 const serviceRouter = require("./Router/Service");
 const adminRouter = require("./Router/Admin");
 const errorMiddleware = require("./middlewares/errorMiddleware");
@@ -20,8 +20,8 @@ app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRouter)
-app.use("/api/form", contactRouter)
-app.use("/api/data", serviceRouter)
+app.use("/api/form", accountRouter)
+// app.use("/api/data", serviceRouter)
 
 // admin route
 app.use("/api/admin", adminRouter)

@@ -1,5 +1,5 @@
 const User = require("../models/userModel");
-const Contact = require("../models/contactModel");
+const Account = require("../models/accountModel");
 
 // get all user from data base 
 const getAllUsers = async (req, res) => {
@@ -48,11 +48,11 @@ const updateUser = async (req, res) => {
 // get all user from data base 
 const getAllContacts = async (req, res) => {
     try {
-        const contacts = await Contact.find();
-        if (!contacts || contacts.length === 0) {
-            return res.status(404).json({ message: "Contacts not found" })
+        const accounts = await Account.find();
+        if (!accounts || accounts.length === 0) {
+            return res.status(404).json({ message: "Account not found" })
         }
-        return res.status(200).json({ contacts })
+        return res.status(200).json({ accounts })
     } catch (error) {
         next(error)
     }
@@ -62,8 +62,8 @@ const getAllContacts = async (req, res) => {
 const deleteContact = async (req, res) => {
     try {
         const id = req.params.id;
-        await Contact.deleteOne({ _id: id })
-        return res.status(200).json({ message: "Contact deleted successfully" })
+        await Account.deleteOne({ _id: id })
+        return res.status(200).json({ message: "Account deleted successfully" })
     } catch (error) {
         next(error)
     }
