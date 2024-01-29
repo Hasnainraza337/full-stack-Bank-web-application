@@ -28,6 +28,29 @@ export const DataContextProvider = ({ children }) => {
         }
     }
 
+    // updated account
+
+    const updateAccount = async (updateBalance) => {
+        try {
+            const response = await fetch(`${API}/api/admin/accounts/update/${updateBalance._id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: authorizationToken,
+                },
+                body: JSON.stringify(updateBalance),
+            });
+            if (response.ok) {
+                toast.success("Amount Deposit successfully");
+                getAllAccounts();
+            } else {
+                const errorData = await response.json();
+                throw new Error(`Error updating account: ${errorData.message}`);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     // Account delete
     const deleteAccount = async (accountId) => {
@@ -55,7 +78,7 @@ export const DataContextProvider = ({ children }) => {
     }, [])
 
     return (
-        <DataContext.Provider value={{ accounts, deleteAccount, getAllAccounts }}>
+        <DataContext.Provider value={{ accounts, updateAccount, deleteAccount, getAllAccounts }}>
             {children}
         </DataContext.Provider>
     )

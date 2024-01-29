@@ -4,13 +4,25 @@ import { ArrowLeftOutlined, DeleteOutlined, CreditCardOutlined, ArrowDownOutline
 import { FaUser } from "react-icons/fa";
 import { Link } from 'react-router-dom'
 import { useDataContext } from '../../../contexts/DataContext';
+import { toast } from 'react-toastify';
 
 export default function Accounts() {
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState(null);
-  const { accounts, deleteAccount } = useDataContext()
+  const { accounts, deleteAccount, updateAccount } = useDataContext()
+  const [state, setState] = useState({ deposit: 0 });
+
+
+  const handleChangeDeposit = (e) => {
+    const { name, value } = e.target;
+    const convertedValue = name === 'deposit'
+      ? parseInt(value, 10) || 0
+      : value;
+    setState(s => ({ ...s, [name]: convertedValue }))
+  }
+
 
   const showModal = (accountId) => {
     const selectedAccount = accounts.find(account => account._id === accountId);
@@ -38,6 +50,24 @@ export default function Accounts() {
   };
 
 
+  const handleDeposite = async () => {
+    try {
+      if (state.deposit === 0) {
+        return toast.error("Please Enter Amount Greater than 0")
+      }
+      const updateBalance = {
+        ...selectedAccount,
+        deposit: selectedAccount.deposit + state.deposit
+      }
+      await updateAccount(updateBalance)
+      setOpen1(false)
+      setState({ deposit: 0 })
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
+
   const handleDeleteAccount = async (accountId) => {
     try {
       await deleteAccount(accountId);
@@ -47,7 +77,6 @@ export default function Accounts() {
       console.error("Error deleting account:", error);
     }
   };
-
 
   return (
     <>
@@ -158,8 +187,8 @@ export default function Accounts() {
         onCancel={handleCancel1}
 
         footer={[
-          <div className='d-flex justify-content-end align-items-center'>
-            <Button className='bg-success text-white d-flex justify-content-center align-items-center'>
+          <div key="model-footer" className='d-flex justify-content-end align-items-center'>
+            <Button key="update-deposit" className='bg-success text-white d-flex justify-content-center align-items-center' onClick={handleDeposite}>
               <CreditCardOutlined /> Deposite
             </Button>
           </div>
@@ -169,8 +198,8 @@ export default function Accounts() {
           <h4>Deposite Amount</h4>
         </div>
         <div className='mt-4'>
-          <input type="number" placeholder='Enter Amount (Min: 500)' size="large" className='form-control mb-3' />
-          <textarea rows="1" placeholder='Description' className='form-control'></textarea>
+          <input type="number" value={state.deposit} name='deposit' placeholder='Enter Amount (Min: 500)' onChange={handleChangeDeposit} size="large" className='form-control mb-3' />
+          {/* <textarea rows="1" placeholder='Description' className='form-control'></textarea> */}
         </div>
       </Modal>
       {/* withdraw model */}

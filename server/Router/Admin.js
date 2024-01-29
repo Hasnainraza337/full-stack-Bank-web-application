@@ -10,5 +10,6 @@ router.delete("/users/delete/:id", authMiddleware, adminMiddleware, adminControl
 router.patch("/users/update/:id", authMiddleware, adminMiddleware, adminController.updateUser);
 router.get("/accounts", authMiddleware, adminMiddleware, adminController.getAllAccounts);
 router.delete("/accounts/delete/:id", authMiddleware, adminMiddleware, adminController.deleteAccount);
+router.patch("/accounts/update/:id", authMiddleware, adminMiddleware, adminController.updateAccount);
 
 module.exports = router;

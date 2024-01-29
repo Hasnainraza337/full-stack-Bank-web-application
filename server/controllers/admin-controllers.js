@@ -68,6 +68,24 @@ const deleteAccount = async (req, res) => {
         next(error)
     }
 }
+// update Account
+const updateAccount = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const updatedBalance = req.body;
+
+        const newBalance = updatedBalance.deposit;
+
+        const updateBalance = await Account.updateOne(
+            { _id: id },
+            { $set: { deposit: newBalance } }
+        );
+
+        return res.status(200).json(updateBalance)
+    } catch (error) {
+        next(error)
+    }
+}
 
 
-module.exports = { getAllUsers, getAllAccounts, deleteUser, getOneUser, updateUser, deleteAccount };
+module.exports = { getAllUsers, getAllAccounts, updateAccount, deleteUser, getOneUser, updateUser, deleteAccount };
