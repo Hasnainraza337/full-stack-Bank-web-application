@@ -45,7 +45,7 @@ export default function Transactions() {
                           <td>{accountNumber}</td>
                           <td>{transactionDate}</td>
                           <td>{timestamp}</td>
-                          <td>{transactionType}</td>
+                          <td style={{ color: transactionType === "Credit" ? "green" : "red", fontWeight: 600 }}>{transactionType}</td>
                           <td>{balance}</td>
                         </tr>
                       )
@@ -56,9 +56,9 @@ export default function Transactions() {
             </div>
           </div>
         </div>
-      </div>
+      </div >
       {/* transcetion details model */}
-      <Modal
+      <Modal Modal
         open={open}
         onCancel={handleCancel}
         footer={null}
@@ -95,7 +95,7 @@ export default function Transactions() {
             <h6>Description</h6>
           </div>
         </div>
-      </Modal>
+      </Modal >
     </>
   )
 }

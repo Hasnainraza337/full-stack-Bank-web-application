@@ -15,7 +15,7 @@ export default function Navbar() {
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <ul className="navbar-nav ms-auto mb-2 mb-lg-0 navbar">
                             <li className="nav-item">
                                 {user.isAdmin &&
                                     <Link to="/dashboard">

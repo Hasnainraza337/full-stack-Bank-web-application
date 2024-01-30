@@ -17,11 +17,18 @@
  }
 
 
-
-
  //  topbar
  @media (min-width: 330px) {
      .topbar {
          height: 20px;
+     }
+ }
+
+ //  Navbar
+ @media (max-width: 992px) {
+     .navbar {
+         display: flex;
+         flex-direction: row;
+         justify-content: flex-start;
      }
  }
