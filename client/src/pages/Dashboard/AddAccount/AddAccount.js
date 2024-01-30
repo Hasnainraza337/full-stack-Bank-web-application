@@ -13,6 +13,7 @@ export default function AddAccount() {
     const { getAllAccounts } = useDataContext()
     const [state, setState] = useState(initialState);
     const navigate = useNavigate();
+    const [isPrecessing, setIsProcessing] = useState(false)
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -25,6 +26,7 @@ export default function AddAccount() {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
+            setIsProcessing(true)
             const response = await fetch(`${API}/api/form/account`, {
                 method: "POST",
                 headers: {
@@ -36,10 +38,12 @@ export default function AddAccount() {
             if (response.ok) {
                 setState(initialState)
                 toast.success("Account Added Successfully")
+                setIsProcessing(false)
                 navigate("/dashboard/accounts")
                 getAllAccounts()
             } else {
                 toast.error(accounts_data.extraDetails ? accounts_data.extraDetails : accounts_data.message)
+                setIsProcessing(false)
             }
         } catch (error) {
             console.log(error)
@@ -59,7 +63,7 @@ export default function AddAccount() {
                                 <h1 className='text-center text-white'>Enter Account Details Below</h1>
                                 <p className=' text-center text-white'>All Field Are  Required*</p>
                             </div>
-                            <form onSubmit={handleSubmit}>
+                            <form onSubmit={handleSubmit} >
                                 <div className='accountInput px-4 py-3'>
                                     <div className="row mb-4">
                                         <div className="col-12 col-md-6 col-lg-6 mb-4 mb-lg-0">
@@ -111,7 +115,15 @@ export default function AddAccount() {
                                         </div>
                                     </div>
                                     <div className='d-flex justify-content-end'>
-                                        <button className='bg-primary text-white border-0 px-3 py-2 rounded-2'>Create Account</button>
+                                        <button className='bg-primary text-white border-0 px-3 py-2 rounded-2' disabled={isPrecessing}  >
+                                            {isPrecessing ? (
+                                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                            ) : (
+                                                'Create Account'
+                                            )
+                                            }
+
+                                        </button>
                                     </div>
                                 </div>
                             </form>

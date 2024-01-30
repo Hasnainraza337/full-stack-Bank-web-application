@@ -37,6 +37,26 @@ const accountSchema = new mongoose.Schema({
     accountNumber: {
         type: String,
     },
+    // transactions: [{
+    //     balance: {
+    //         type: Number,
+    //     },
+    //     timestamp: {
+    //         type: String,
+    //     },
+    //     accountNumber: {
+    //         type: String
+    //     },
+    //     transactionType: {
+    //         type: String
+    //     },
+    //     transactionId: {
+    //         type: String
+    //     },
+    //     transactionDate: {
+    //         type: String
+    //     }
+    // }]
 
 })
 

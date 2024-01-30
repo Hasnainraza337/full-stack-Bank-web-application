@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Button, Modal } from 'antd';
 import { ArrowLeftOutlined, TransactionOutlined } from "@ant-design/icons"
 import { Link } from 'react-router-dom'
+import { useDataContext } from '../../../contexts/DataContext';
 
 export default function Transactions() {
   const [open, setOpen] = useState(false);
+  const { transactions } = useDataContext()
   const showModal = () => {
     setOpen(true);
   };
@@ -27,38 +29,27 @@ export default function Transactions() {
                   <thead className='table-dark'>
                     <tr>
                       <th scope="col">Transaction ID</th>
+                      <th scope="col">Account#</th>
+                      <th scope="col">Date of transaction</th>
                       <th scope="col">Time</th>
-                      <th scope="col">Date</th>
-                      <th scope="col">Account ID</th>
                       <th scope="col">Type</th>
                       <th scope="col">Amount</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <th  style={{ cursor: "pointer",color:"skyblue" }} onClick={showModal}>1</th>
-                      <td>Mark</td>
-                      <td>Otto</td>
-                      <td>@mdo</td>
-                      <td>@mdo</td>
-                      <td>@mdo</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>Jacob</td>
-                      <td>Thornton</td>
-                      <td>@fat</td>
-                      <td>@fat</td>
-                      <td>@fat</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">3</th>
-                      <td>Larry the Bird</td>
-                      <td>@twitter</td>
-                      <td>@twitter</td>
-                      <td>@twitter</td>
-                      <td>@twitter</td>
-                    </tr>
+                    {transactions.map((transcetion, i) => {
+                      const { balance, timestamp, accountNumber, transactionType, transactionId, transactionDate } = transcetion;
+                      return (
+                        <tr key={i}>
+                          <th style={{ cursor: "pointer", color: "blue", fontWeight: 400 }}  >{transactionId}</th>
+                          <td>{accountNumber}</td>
+                          <td>{transactionDate}</td>
+                          <td>{timestamp}</td>
+                          <td>{transactionType}</td>
+                          <td>{balance}</td>
+                        </tr>
+                      )
+                    })}
                   </tbody>
                 </table>
               </div>

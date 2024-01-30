@@ -7,7 +7,7 @@ export default function Footer() {
             <div className="container">
                 <div className="row">
                     <div className="col">
-                        <p className='text-center text-white mb-0'>&copy; {year} Bank.Develop by Hasnain Raza</p>
+                        <p className='text-center text-white mb-0'>&copy; {year} ABC Bank.Developed by Hasnain Raza</p>
                     </div>
                 </div>
             </div>

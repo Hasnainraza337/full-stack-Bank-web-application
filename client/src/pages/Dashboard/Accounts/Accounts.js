@@ -11,8 +11,9 @@ export default function Accounts() {
   const [open1, setOpen1] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState(null);
-  const { accounts, deleteAccount, updateAccount } = useDataContext()
+  const { accounts, deleteAccount, updateAccount, updateWithdrawBalance, isPrecessing } = useDataContext()
   const [state, setState] = useState({ deposit: 0 });
+  const [withdraw, setWithdraw] = useState({ deposit: 0 });
 
 
   const handleChangeDeposit = (e) => {
@@ -21,6 +22,13 @@ export default function Accounts() {
       ? parseInt(value, 10) || 0
       : value;
     setState(s => ({ ...s, [name]: convertedValue }))
+  }
+  const handleChangeWithdraw = (e) => {
+    const { name, value } = e.target;
+    const convertedValue = name === 'deposit'
+      ? parseInt(value, 10) || 0
+      : value;
+    setWithdraw(s => ({ ...s, [name]: convertedValue }))
   }
 
 
@@ -53,15 +61,34 @@ export default function Accounts() {
   const handleDeposite = async () => {
     try {
       if (state.deposit === 0) {
-        return toast.error("Please Enter Amount Greater than 0")
+        return toast.error("Please Enter Amount Greater than 0 for Deposit")
       }
       const updateBalance = {
         ...selectedAccount,
-        deposit: selectedAccount.deposit + state.deposit
+        deposit: state.deposit
       }
       await updateAccount(updateBalance)
       setOpen1(false)
       setState({ deposit: 0 })
+    } catch (error) {
+      console.log(error)
+    }
+  };
+  const handleWithdraw = async () => {
+    try {
+      if (withdraw.deposit === 0) {
+        return toast.error("Please Enter Amount Greater than 0 For Withdraw")
+      }
+      if (withdraw.deposit > selectedAccount.deposit) {
+        return toast.error("Insufficient Balance");
+      }
+      const updateWithdraw = {
+        ...selectedAccount,
+        deposit: withdraw.deposit
+      }
+      await updateWithdrawBalance(updateWithdraw)
+      setOpen2(false)
+      setWithdraw({ deposit: 0 })
     } catch (error) {
       console.log(error)
     }
@@ -77,6 +104,8 @@ export default function Accounts() {
       console.error("Error deleting account:", error);
     }
   };
+
+
 
   return (
     <>
@@ -149,7 +178,13 @@ export default function Accounts() {
       >
         <div className='d-flex justify-content-between align-items-center mt-5'>
           <h4>Account Details</h4>
-          <button className='bg-danger border-0 rounded-2 text-white py-1 px-2 d-flex align-items-center justify-content-center' onClick={() => { handleDeleteAccount(selectedAccount._id) }} ><DeleteOutlined className='me-2' /> Delete Account</button>
+          <button className='bg-danger border-0 rounded-2 text-white py-1 px-2 d-flex align-items-center justify-content-center' onClick={() => { handleDeleteAccount(selectedAccount._id) }} disabled={isPrecessing} ><DeleteOutlined className='me-2' />
+            {isPrecessing ? (
+              <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            ) : (
+              'Delete Account'
+            )}
+          </button>
         </div>
         {selectedAccount && (
           <div style={{ width: "320px", marginTop: "30px" }}>
@@ -162,7 +197,7 @@ export default function Accounts() {
               <p>{selectedAccount.accountNumber}</p>
             </div>
             <div className='d-flex justify-content-between'>
-              <h6>Full Name</h6>
+              <h6>Account Title</h6>
               <p>{selectedAccount.fullName}</p>
             </div>
             <div className='d-flex justify-content-between'>
@@ -188,7 +223,7 @@ export default function Accounts() {
 
         footer={[
           <div key="model-footer" className='d-flex justify-content-end align-items-center'>
-            <Button key="update-deposit" className='bg-success text-white d-flex justify-content-center align-items-center' onClick={handleDeposite}>
+            <Button key="update-deposit" className='bg-success text-white d-flex justify-content-center align-items-center' onClick={handleDeposite} loading={isPrecessing}>
               <CreditCardOutlined /> Deposite
             </Button>
           </div>
@@ -198,7 +233,7 @@ export default function Accounts() {
           <h4>Deposite Amount</h4>
         </div>
         <div className='mt-4'>
-          <input type="number" value={state.deposit} name='deposit' placeholder='Enter Amount (Min: 500)' onChange={handleChangeDeposit} size="large" className='form-control mb-3' />
+          <input type="number" name='deposit' placeholder='Enter Amount' onChange={handleChangeDeposit} size="large" className='form-control mb-3' />
           {/* <textarea rows="1" placeholder='Description' className='form-control'></textarea> */}
         </div>
       </Modal>
@@ -208,8 +243,8 @@ export default function Accounts() {
         onCancel={handleCancel2}
 
         footer={[
-          <div className='d-flex justify-content-end align-items-center'>
-            <Button type='primary' className='d-flex justify-content-center align-items-center'>
+          <div key="model-footer" className='d-flex justify-content-end align-items-center'>
+            <Button key="withdraw-button" type='primary' onClick={handleWithdraw} loading={isPrecessing} className='d-flex justify-content-center align-items-center'>
               <ArrowDownOutlined /> Withdraw
             </Button>
           </div>
@@ -220,8 +255,8 @@ export default function Accounts() {
           <h4>Withdraw Amount</h4>
         </div>
         <div className='mt-4'>
-          <input type="number" placeholder='Withdraw Amount (Min: 500)' size="large" className='form-control mb-3' />
-          <textarea rows="1" placeholder='Description' className='form-control'></textarea>
+          <input type="number" name='deposit' placeholder='Withdraw Amount' onChange={handleChangeWithdraw} size="large" className='form-control mb-3' />
+          {/* <textarea rows="1" placeholder='Description' className='form-control'></textarea> */}
         </div>
 
       </Modal>

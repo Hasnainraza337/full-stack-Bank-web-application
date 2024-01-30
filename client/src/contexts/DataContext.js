@@ -8,6 +8,8 @@ const DataContext = createContext();
 export const DataContextProvider = ({ children }) => {
     const { API, authorizationToken } = useAuthContext();
     const [accounts, setAccounts] = useState([])
+    const [transactions, setTransactions] = useState([])
+    const [isPrecessing, setIsProcessing] = useState(false)
 
     const getAllAccounts = async () => {
         try {
@@ -32,7 +34,8 @@ export const DataContextProvider = ({ children }) => {
 
     const updateAccount = async (updateBalance) => {
         try {
-            const response = await fetch(`${API}/api/admin/accounts/update/${updateBalance._id}`, {
+            setIsProcessing(true)
+            const response = await fetch(`${API}/api/admin/accounts/update/deposit/${updateBalance._id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -43,7 +46,10 @@ export const DataContextProvider = ({ children }) => {
             if (response.ok) {
                 toast.success("Amount Deposit successfully");
                 getAllAccounts();
+                getTransactionHistory()
+                setIsProcessing(false)
             } else {
+                setIsProcessing(false)
                 const errorData = await response.json();
                 throw new Error(`Error updating account: ${errorData.message}`);
             }
@@ -52,9 +58,33 @@ export const DataContextProvider = ({ children }) => {
         }
     };
 
+    // Wihtdraw update
+    const updateWithdrawBalance = async (updateWithdraw) => {
+        try {
+            setIsProcessing(true)
+            const response = await fetch(`${API}/api/admin/accounts/update/withdraw/${updateWithdraw._id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: authorizationToken
+                },
+                body: JSON.stringify(updateWithdraw)
+            })
+            if (response.ok) {
+                toast.success("Amount Withdraw Successfully")
+                getAllAccounts()
+                getTransactionHistory()
+                setIsProcessing(false)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    };
+
     // Account delete
     const deleteAccount = async (accountId) => {
         try {
+            setIsProcessing(true)
             const response = await fetch(`${API}/api/admin/accounts/delete/${accountId}`, {
                 method: "DELETE",
                 headers: {
@@ -62,11 +92,30 @@ export const DataContextProvider = ({ children }) => {
                 }
             })
             if (response.ok) {
+                setIsProcessing(false)
                 toast.success("Account deleted successfully")
                 getAllAccounts()
             } else {
-                const errorData = await response.json(); // Assuming your server returns JSON error messages
+                setIsProcessing(false)
+                const errorData = await response.json();
                 throw new Error(`Error deleting account: ${errorData.message}`);
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    // getall Transacion History
+    const getTransactionHistory = async () => {
+        try {
+            const response = await fetch(`${API}/api/admin/transactions`, {
+                method: "GET",
+                headers: {
+                    Authorization: authorizationToken,
+                },
+            })
+            if (response.ok) {
+                const transactionsData = await response.json();
+                setTransactions(transactionsData.transactions)
             }
         } catch (error) {
             console.log(error)
@@ -75,10 +124,11 @@ export const DataContextProvider = ({ children }) => {
 
     useEffect(() => {
         getAllAccounts()
+        getTransactionHistory()
     }, [])
 
     return (
-        <DataContext.Provider value={{ accounts, updateAccount, deleteAccount, getAllAccounts }}>
+        <DataContext.Provider value={{ accounts, updateAccount, isPrecessing, updateWithdrawBalance, deleteAccount, getAllAccounts, transactions, }}>
             {children}
         </DataContext.Provider>
     )

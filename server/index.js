@@ -5,12 +5,11 @@ const app = express()
 const dbConnect = require("./utils/dbConection")
 const authRouter = require("./Router/Auth");
 const accountRouter = require("./Router/account");
-const serviceRouter = require("./Router/Service");
 const adminRouter = require("./Router/Admin");
 const errorMiddleware = require("./middlewares/errorMiddleware");
 
 const corsoptions = {
-    origin: "http://localhost:3000",
+    origin: process.env.BASE_URL,
     methods: "GET,POST,PUT,DELETE,PATCH",
     Credentials: true
 }
@@ -21,7 +20,6 @@ app.use(express.json());
 // Routes
 app.use("/api/auth", authRouter)
 app.use("/api/form", accountRouter)
-// app.use("/api/data", serviceRouter)
 
 // admin route
 app.use("/api/admin", adminRouter)
@@ -31,7 +29,7 @@ app.use("/api/admin", adminRouter)
 app.use(errorMiddleware);
 
 
-const port = 8000
+const port = process.env.PORT || 8000
 dbConnect().then(() => {
     app.listen(port, () => {
         console.log("server is running at port:", port)

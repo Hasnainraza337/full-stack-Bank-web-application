@@ -3,11 +3,10 @@
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    height: calc(100vh - 116px);
+    // height: calc(100vh - 116px);
+    min-height: 100vh;
 }
 
 .homeCard {
     background-color: rgba(0, 70, 107, .8);
 }
-
-
