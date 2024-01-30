@@ -22,7 +22,7 @@ export default function Hero() {
               </div>
             </div>
             <div className="col-12 col-md-6 col-lg-6">
-              <div className="card homeCard py-4 px-3" style={{ height: "270px" }}>
+              <div className="card homeCard py-4 px-3" style={{ minHeight: "270px" }}>
                 <h1 className='text-white' style={{ fontWeight: 500 }}>Our Services</h1>
                 <p className='text-white'> Explore a wide range of financial services tailored to meet your individual and business needs.
                   From savings accounts to loans, we have you covered. Our cutting-edge online banking platform
@@ -45,7 +45,7 @@ export default function Hero() {
               </div>
             </div>
             <div className="col-12 col-md-6 col-lg-6">
-              <div className="card homeCard py-4 px-3" style={{ height: "250px" }}>
+              <div className="card homeCard py-4 px-3" style={{ minHeight: "250px" }}>
                 <h1 className='text-white' style={{ fontWeight: 500 }}>Contact Us</h1>
                 <p className='text-white'> Have questions or need assistance? Our dedicated customer support team is here to help.
                   Contact us via phone, email, or visit one of our branches for in-person assistance.</p>

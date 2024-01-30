@@ -10,3 +10,11 @@
 .homeCard {
     background-color: rgba(0, 70, 107, .8);
 }
+
+@media screen and (max-width:992px) {
+    .homeCard {
+        h1 {
+            font-size: 25px;
+        }
+    }
+}
