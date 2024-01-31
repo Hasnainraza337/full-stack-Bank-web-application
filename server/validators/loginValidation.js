@@ -6,7 +6,7 @@ const loginSchema = z.object({
     email: z
         .string({ required_error: "Email is required" })
         .trim()
-        .email({ message: "Invalid email address" })
+        .email({ message: "Invalid Credentials" })
         .min(3, { message: "Email must be at least 3 charcters" })
         .max(30, { message: "Email cannot  more than 30 charcters" }),
     password: z

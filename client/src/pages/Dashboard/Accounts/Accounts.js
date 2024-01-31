@@ -187,7 +187,7 @@ export default function Accounts() {
           </button>
         </div>
         {selectedAccount && (
-          <div style={{ width: "320px", marginTop: "30px" }}>
+          <div style={{ minWidth: "260px", maxWidth:"360px", marginTop: "30px" }}>
             <div className='d-flex justify-content-between'>
               <h6>Branch Code</h6>
               <p>{selectedAccount.branchCode}</p>

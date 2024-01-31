@@ -99,13 +99,13 @@ export default function Register() {
                     </Form.Item>
 
 
-                    <Button className='mt-1' type='primary' htmlType='submit'>Register</Button>
+                    <Button className='mt-1  ' type='primary' htmlType='submit'>Register</Button>
 
                   </Form>
                 </div>
 
-                <div className="card-right">
-                  <img src={signpic} alt="Signup image" style={{ width: "350px" }} />
+                <div className="card-right mt-4 mt-lg-0">
+                  <img src={signpic} alt="Signup image" style={{ width: "330px" }} />
                   <p className='text-center mt-3'><Link to="/auth/login" className='reglink'>I am already register</Link></p>
                 </div>
               </div>
